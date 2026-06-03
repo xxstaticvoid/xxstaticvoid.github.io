@@ -1,19 +1,133 @@
-.background {
-  background-color: rgb(36, 36, 36); /*dark gray*/
-  padding: 20px;
-  border: 5px solid black;
+* {
+  box-sizing: border-box;
 }
 
-.heading {
-  padding: 20px;
-  border: 5px solid black;
+html {
+  scroll-behavior: smooth;
 }
 
-.body {
-  padding: 20px;
-  border: 5px solid black;
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  color: #eeeeee;
+  background-color: rgb(36, 36, 36); /* dark gray */
+}
+
+.site-header {
+  width: 100%;
+}
+
+.color-border-bg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-image: radial-gradient(#ff0066, #660066);
+}
+
+.color-border-fg {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(36, 36, 36); /* dark gray */
+  padding: 34px 20px;
+  text-align: center;
 }
 
 h1 {
-  color: purple;
+  margin: 0;
+  color: #d45cff;
+  font-size: clamp(2rem, 6vw, 4rem);
+  letter-spacing: 1px;
+}
+
+.tagline {
+  margin: 8px 0 0;
+  color: #cccccc;
+  font-size: 1.05rem;
+}
+
+.sub-header {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 14px 20px;
+  background-color: #1f1f1f;
+  border-bottom: 1px solid #3a3a3a;
+}
+
+.sub-header a {
+  color: #eeeeee;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 999px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sub-header a:hover,
+.sub-header a:focus {
+  color: #ffffff;
+  background-color: #660066;
+}
+
+.content-wrapper {
+  width: min(950px, calc(100% - 32px));
+  margin: 36px auto;
+}
+
+.feature-card {
+  margin-bottom: 24px;
+  padding: 28px;
+  background-color: #2f2f2f;
+  border: 1px solid #4b4b4b;
+  border-left: 6px solid #ff0066;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+}
+
+.feature-card h2 {
+  margin: 0 0 12px;
+  color: #f3c4ff;
+  font-size: 1.6rem;
+}
+
+.feature-card p {
+  margin: 0;
+  color: #dddddd;
+}
+
+.site-footer {
+  padding: 22px;
+  text-align: center;
+  color: #aaaaaa;
+  background-color: #1f1f1f;
+  border-top: 1px solid #3a3a3a;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .color-border-fg {
+    padding: 26px 16px;
+  }
+
+  .sub-header {
+    justify-content: flex-start;
+  }
+
+  .sub-header a {
+    width: 100%;
+    text-align: center;
+    background-color: #2f2f2f;
+  }
+
+  .feature-card {
+    padding: 22px;
+  }
 }
