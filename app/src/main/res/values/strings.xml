@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Login Screen Activity -->
+    <string name="app_name">BoardSavr</string>
+    <string name="welcome_greeting_text">Hello, Welcome!</string>
+    <string name="logo_description">Picture of Company Logo</string>
+
+    <string name="username_prompt_text">Enter username:</string>
+    <string name="password_prompt_text">Enter password:</string>
+    <string name="sign_in_text">Sign In</string>
+    <string name="create_account_text">Create Account</string>
+
+    <string name="alert_dialog_positive_text">Create Account</string>
+    <string name="alert_dialog_neutral_text">Continue without an Account</string>
+
+
+    <!-- Main Activity ~ Database -->
+    <string name="database_title">Saved Boards</string>
+    <string name="delete_button_text">X</string>
+    <string name="add_entry_button_text">Add Board</string>
+    <string name="board_image_description">Picture of chess board captured by user</string>
+
+
+
+    <!-- Camera Activity -->
+    <string name="camera_title">Camera</string>"
+    <string name="camera_button_text">Capture Board</string>"
+
+    <!-- Board View Activity -->
+    <string name="place_holder_text">Placeholder text</string>
+
+</resources>

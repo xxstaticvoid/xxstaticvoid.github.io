@@ -1,0 +1,3 @@
+"id","user_id","fen", "image_path", "date", "description"
+"1", "WHITE", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", "board1", "2024-05-21T12:30:00", "chess starting position"
+"2", "WHITE", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", "board1", "2024-05-21T12:45:00", "chess starting position"

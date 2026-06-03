@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.boardsaver.LoginActivity"
+    android:background="@color/deep_gray">
+
+
+    <!-- Logo and App Name Combination -->
+    <LinearLayout
+        android:id="@+id/logo_linear_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="49dp"
+        android:padding="5dp">
+
+        <!-- App Logo -->
+        <ImageView
+            android:id="@+id/image_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_launcher_foreground"
+            android:contentDescription="@string/logo_description"/>
+
+
+        <!-- App Name -->
+        <TextView
+            android:id="@+id/text_app_name"
+            style="@style/AppTitleTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/app_name" />
+
+    </LinearLayout>
+
+
+
+    <!-- Login Screen Fields -->
+    <LinearLayout
+        android:id="@+id/login_info_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/logo_linear_layout"
+        android:layout_marginTop="50dp"
+        android:padding="10dp" >
+
+        <TextView
+            android:id="@+id/text_username_prompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/username_prompt_text"
+            style="@style/PromptTextStyle"/>
+
+        <EditText
+            android:id="@+id/edit_text_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:ems="10"
+            style="@style/EditTextStyle"/>
+
+        <TextView
+            android:id="@+id/text_password_prompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/password_prompt_text"
+            android:layout_marginTop="25dp"
+            style="@style/PromptTextStyle"/>
+
+        <EditText
+            android:id="@+id/edit_text_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            style="@style/EditTextStyle"/>
+
+    </LinearLayout>
+
+
+
+    <!-- Buttons -->
+
+    <LinearLayout
+        android:id="@+id/button_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@+id/login_info_layout"
+        android:layout_marginTop="50dp"
+        android:padding="10dp" >
+
+            <Button
+                android:id="@+id/button_sign_in"
+                android:layout_width="165dp"
+                android:layout_height="68dp"
+                android:text="@string/sign_in_text"
+                style="@style/SignInButtonStyle"/>
+
+            <Button
+                android:id="@+id/button_create_account"
+                android:layout_width="165dp"
+                android:layout_height="68dp"
+                android:text="@string/create_account_text"
+                android:layout_marginLeft="50dp"
+                style="@style/SignInButtonStyle"/>
+
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.App" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@color/company_color</item>
+        <item name="backgroundColor">@color/deep_gray</item>
+    </style>
+
+    <style name="Theme.App" parent="Base.Theme.App" />
+
+    
+    <style name="AppTitleTextStyle">
+        <item name="android:textSize">33sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    
+    <style name="PromptTextStyle">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="EditTextStyle">
+        <item name="android:textSize">25sp</item>
+        <item name="android:textColor">@color/company_color</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <!-- Button styles -->
+    <style name="SignInButtonStyle">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+
+
+
+    <!-- Database styles -->
+
+    <style name="DatabaseTitleTextStyle">
+        <item name="android:textSize">29sp</item>
+        <item name="android:textColor">@color/company_color</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+    </style>
+    
+</resources>
