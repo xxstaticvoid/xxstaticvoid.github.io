@@ -1,22 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>Ebersole ePortfolio</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Joseph Ebersole ePortfolio for SNHU CS499 Computer Science Capstone Project">
-    <meta name="keywords" content="SNHU, CS499, Capstone, Computer Science">
+    <meta name="keywords" content="SNHU, CS499, Capstone, Computer Science, BoardSavr, Android, Java">
     <meta name="author" content="Joseph Ebersole">
 
-    <link rel="stylesheet" href="./assets/css/styles.css">
+    <link rel="stylesheet" href="./assets/styles/styles.css">
   </head>
   <body>
-    <div class="background">
-      <div class="heading">
-        <h1>Welcome to my ePortfolio</h1>
+    <header class="site-header">
+      <div class="color-border-bg">
+        <div class="color-border-fg">
+          <h1>Joseph Ebersole ePortfolio</h1>
+          <p class="tagline">CS 499 Computer Science Capstone Project</p>
+        </div>
       </div>
-      <div class="body">
-        <p>Hello!</p>
-      </div>
-    </div>
+
+      <nav class="sub-header" aria-label="sections">
+        <a href="https://joseph-ebersole.us/">joseph-ebersole.us</a>
+        <a href="https://github.com/xxstaticvoid">Github</a>
+        <a href="https://www.linkedin.com/in/joseph-ebersole/">LinkedIn</a>
+      </nav>
+    </header>
+
+    <main class="content-wrapper">
+      <section id="overview" class="feature-card">
+        <h2>Project Overview</h2>
+        <p>
+          Use this section to introduce the original programming project, what problem it was meant to solve, and why you selected it for enhancement. This is also a good place to briefly explain the purpose of your ePortfolio and what visitors can expect to learn from the sections below.
+        </p>
+      </section>
+
+      <section id="software-design" class="feature-card">
+        <h2>Software Design Improvements</h2>
+        <p>
+          Describe the structural improvements you made to the application, such as refactoring code, separating responsibilities, improving readability, or applying stronger object-oriented design principles. Focus on how these changes made the project easier to maintain, test, and expand.
+        </p>
+      </section>
+
+      <section id="algorithms" class="feature-card">
+        <h2>Algorithms and Data Structures</h2>
+        <p>
+          Explain any improvements related to logic, performance, searching, sorting, validation, or data handling. This section can show how your algorithmic choices made the application more efficient, reliable, or accurate.
+        </p>
+      </section>
+
+      <section id="databases" class="feature-card">
+        <h2>Database Enhancements</h2>
+        <p>
+          Discuss changes made to how information is stored, retrieved, updated, or organized. You can include improvements to schemas, queries, database access classes, or any changes that made the data layer cleaner and more dependable.
+        </p>
+      </section>
+
+      <section id="reflection" class="feature-card">
+        <h2>Reflection and Future Work</h2>
+        <p>
+          Use this final section to reflect on what you learned while improving the project. You can also mention possible future enhancements, lessons learned, and how this work demonstrates your growth as a computer science student.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer"></footer>
   </body>
 </html>
