@@ -84,14 +84,14 @@ h1 {
   padding: 28px;
   background-color: #2f2f2f;
   border: 1px solid #4b4b4b;
-  border-left: 6px solid #ff0066;
+  border-left: 6px solid #d45cff;
   border-radius: 14px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
 }
 
 .feature-card h2 {
   margin: 0 0 12px;
-  color: #f3c4ff;
+  color: #f3c4ff; /* lavender */
   font-size: 1.6rem;
 }
 
