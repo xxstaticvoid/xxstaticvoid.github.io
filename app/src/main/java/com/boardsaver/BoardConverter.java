@@ -29,15 +29,12 @@ public class BoardConverter {
             {'R','N','B','Q','K','B','N','R'} //white
     };
 
-    public BoardConverter() {
-        this.normalizedBoardMat = null;
-    }
-
     public BoardConverter(Mat boardMat) {
         Mat normalizedMat = new Mat();
         Imgproc.resize(boardMat, normalizedMat, new Size(BOARD_SIZE, BOARD_SIZE));
         this.normalizedBoardMat = normalizedMat;
     }
+
 
     public String convert() {
         char[][] boardState = new char[8][8];
@@ -45,7 +42,7 @@ public class BoardConverter {
         for(int row = 0; row < 8; row++) {
             for(int col = 0; col < 8; col++) {
                 //Log.d("CameraX", "Row: " + row + " Col: " + col);
-                Mat squareMat = getSquare(row, col);
+                Mat squareMat = getSquare(this.normalizedBoardMat, row, col);
                 if (isSquareOccupied(squareMat)) {
                     boardState[row][col] = '?';
                 } else {
@@ -55,11 +52,11 @@ public class BoardConverter {
             }
         }
 
-        return convertToFen(boardState);
+        return classifySquares(boardState);
     }
 
 
-    public String convertToFen(char[][] boardState) {
+    public String classifySquares(char[][] boardState) {
         StringBuilder fenBuilder = new StringBuilder();
 
         for (int row = 0; row < 8; row++) {
@@ -114,7 +111,7 @@ public class BoardConverter {
     }
 
 
-    private Mat getSquare(int row, int col) {
+    public static Mat getSquare(Mat board, int row, int col) throws IllegalArgumentException {
         Rect squareRect = new Rect(
                 col * SQUARE_SIZE,
                 row * SQUARE_SIZE,
@@ -122,11 +119,12 @@ public class BoardConverter {
                 SQUARE_SIZE
         );
 
-        return new Mat(this.normalizedBoardMat, squareRect);
+        return new Mat(board, squareRect);
     }
 
-    private Mat getSquareCenter(Mat squareMat) {
-        int margin = squareMat.width() / 5;
+
+    public static Mat getSquareCenter(Mat squareMat) {
+        final int margin = squareMat.width() / 5;
 
         Rect centerRect = new Rect(
                 margin,

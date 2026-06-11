@@ -47,6 +47,9 @@ public class CameraActivity extends AppCompatActivity {
     private RectF previewBounds;
     private RectF guideRect;
 
+    private BoardConverter boardConverter;
+    private TemplateStorage templateStorage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,23 +57,34 @@ public class CameraActivity extends AppCompatActivity {
 
         WindowMetrics metrics = getWindowManager().getCurrentWindowMetrics();
         previewBounds = new RectF(metrics.getBounds());
+        templateStorage = new TemplateStorage(this);
 
         BoardOverlayView overlayView = findViewById(R.id.overlay_view);
         overlayView.post(() -> {
             guideRect = overlayView.getGuideRect();
         });
 
-
+        //display camera preview
         startCamera();
+
+
+        //build button listeners
+        Button buttonCalibrate = findViewById(R.id.button_calibrate);
+        buttonCalibrate.setOnClickListener(view -> {
+            takePhoto(this.imageCapture, true);
+        });
 
         Button buttonCapture = findViewById(R.id.button_capture);
         buttonCapture.setOnClickListener(view -> {
-            takePhoto(this.imageCapture);
+            takePhoto(this.imageCapture, false);
         });
 
     }
 
 
+    /**
+     *
+     */
     private void startCamera() {
         ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
 
@@ -106,7 +120,14 @@ public class CameraActivity extends AppCompatActivity {
         }, ContextCompat.getMainExecutor(this));
     }
 
-    private void takePhoto(ImageCapture imageCapture) {
+
+    /**
+     *
+     *
+     * @param imageCapture camera.core.ImageCapture / access to takePicture()
+     * @param parseTemplates boolean / whether to parse templates or not (current mode)
+     */
+    private void takePhoto(ImageCapture imageCapture, boolean parseTemplates) {
         assert imageCapture != null;
 
         var cameraExecutor = Executors.newSingleThreadExecutor();
@@ -160,18 +181,19 @@ public class CameraActivity extends AppCompatActivity {
                                     Bitmap.Config.ARGB_8888
                             );
 
+                            boardConverter = new BoardConverter(croppedBoardMat);
+
+                            //if user selected 'calibrate' mode
+                            if(parseTemplates) {
+                                //save theme as piece templates
+                                calibrateTemplates(croppedBoardMat);
+                                cameraExecutor.shutdown();
+                                return;
+                            }
+
                             //saved cropped image
                             Utils.matToBitmap(croppedBoardMat, boardBitmap);
                             saveBitmap(boardBitmap, imageFilename);
-
-                            //convert cropped to fen
-                            BoardConverter converter = new BoardConverter(croppedBoardMat);
-                            String fen = converter.convert();
-
-
-                            Log.d("CameraX","Detected State:\n" + fen);
-
-
 
                             //FIXME:: CREATE BOARD & ADD ENTRY IN DB
 
@@ -215,6 +237,16 @@ public class CameraActivity extends AppCompatActivity {
 
         return rotated;
     }
+
+
+    private void calibrateTemplates(Mat croppedBoardMat) {
+        CalibrationService calibrationService = new CalibrationService(
+            templateStorage
+        );
+        calibrationService.calibrate(croppedBoardMat);
+    }
+
+
 
     private Mat detectAndCropBoard(Mat rgbaMat) {
         Mat grayMat = new Mat();

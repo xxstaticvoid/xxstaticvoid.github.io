@@ -26,6 +26,8 @@
     <!-- Camera Activity -->
     <string name="camera_title">Camera</string>"
     <string name="camera_button_text">Capture Board</string>"
+    <string name="camera_calibrate_button_text">Calibrate</string>
+
 
     <!-- Board View Activity -->
     <string name="place_holder_text">Placeholder text</string>
