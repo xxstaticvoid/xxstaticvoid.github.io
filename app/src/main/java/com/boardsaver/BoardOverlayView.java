@@ -10,10 +10,11 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-
-//custom view class for camera border overlay
-//this indicates to users that the board should fit in outline
-// (makes it easier and faster for image processing)
+/**
+ * custom view class for camera border overlay
+ * this indicates to users that the board should fit in outline
+ * (makes it easier and faster for image processing)
+ */
 public class BoardOverlayView extends View {
 
     private final Paint borderPaint;

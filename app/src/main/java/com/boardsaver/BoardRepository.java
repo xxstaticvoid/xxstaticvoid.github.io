@@ -22,7 +22,12 @@ public class BoardRepository {
     }
 
 
-    // CREATE
+    /**
+     * CREATE - adds board to db
+     *
+     * @param board board data type that is to be added to db
+     * @return true if successful, false otherwise.
+     */
     public boolean addBoard(Board board) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues boardValues = packIntoValues(board);
@@ -30,7 +35,12 @@ public class BoardRepository {
         return row >= 0;
     }
 
-    // DELETE
+    /**
+     * DELETE - removes matching board from db
+     *
+     * @param id board id that is to be matched and removed from db
+     * @return true if successful, false otherwise.
+     */
     public boolean deleteBoard(int id) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         String where = BoardContract.BoardEntry.COLUMN_ID + " = ?";
@@ -40,10 +50,17 @@ public class BoardRepository {
     }
 
 
-    // UPDATE
+    /**
+     * UPDATE - updates an existing board in db with new values. Matches by Board ID.
+     *
+     * @param board board data type that is to be updated in db. Matches the Board ID.
+     * @return true if successful, false otherwise.
+     */
     public boolean updateItem(Board board) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues updatedValues = packIntoValues(board);
+        updatedValues.remove(BoardContract.BoardEntry.COLUMN_ID);
+
         String where = BoardContract.BoardEntry.COLUMN_ID + " = ?";
         String[] whereArgs = {String.valueOf(board.getId())};
 
@@ -51,25 +68,13 @@ public class BoardRepository {
         return rowsAffected > 0;
     }
 
-    // COUNT
-    public int getNumOfRows() {
 
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String query = "SELECT COUNT(*) FROM " + BoardContract.BoardEntry.TABLE_NAME;
-        Cursor cursor = db.rawQuery(query, null);
-
-        int rowCount = 0;
-        if(cursor.moveToFirst()) {
-            //get count, only 1 row returned from COUNT()
-            rowCount = cursor.getInt(0);
-        }
-        cursor.close();
-        return rowCount;
-
-    }
-
-    // READ
-    //used for syncing to db to get current items
+    /**
+     * READ - retrieves all board entries from db. used for syncing to db to get current items
+     *
+     * @return ArrayList of Board data type. this will be all items in the db.
+     * @throws IllegalArgumentException will be thrown if column names are invalid. may also through SQLiteException if if the database cannot be opened
+     */
     public ArrayList<Board> getAllItems() throws IllegalArgumentException {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -110,6 +115,36 @@ public class BoardRepository {
 
     }
 
+
+    /**
+     * COUNT - gets number of rows in db
+     *
+     * @return number of rows in db
+     *
+     */
+    public int getNumOfRows() {
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = "SELECT COUNT(*) FROM " + BoardContract.BoardEntry.TABLE_NAME;
+        Cursor cursor = db.rawQuery(query, null);
+
+        int rowCount = 0;
+        if(cursor.moveToFirst()) {
+            //get count, only 1 row returned from COUNT()
+            rowCount = cursor.getInt(0);
+        }
+        cursor.close();
+        return rowCount;
+
+    }
+
+
+    /**
+     * stores board data into ContentValues object for convenient handling.
+     *
+     * @return ContentValues object containing board data
+     *
+     */
     private ContentValues packIntoValues(Board board) {
         ContentValues values = new ContentValues();
         values.put(BoardContract.BoardEntry.COLUMN_ID, board.getId());

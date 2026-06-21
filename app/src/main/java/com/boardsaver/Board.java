@@ -24,7 +24,7 @@ public class Board {
 
         this.imagePath = imageName;
         this.date = date;
-        this.description = "description";
+        this.description = description;
     }
 
 

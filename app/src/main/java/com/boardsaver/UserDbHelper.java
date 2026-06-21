@@ -5,11 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 
-//FIXME:: CONVERT CLASS TO SINGLETON PATTERN
 public class UserDbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "users.db";
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;
 
     private static volatile UserDbHelper instance;
 

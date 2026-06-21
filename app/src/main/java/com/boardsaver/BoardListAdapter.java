@@ -14,8 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 
-/*
- * Adapters provide a binding from an app-specific data set to views that are displayed within a RecyclerView.
+/**
+ * Adapter class for managing the display of {@link Board} items in a {@link RecyclerView}.
+ * Provides binding from the board data set to the card views displayed in the main list.
  */
 public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.BoardListHolder> {
 
@@ -23,9 +24,20 @@ public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.Boar
     private ArrayList<Board> boardList;
     private final OnItemClickListener listener;
 
-    // Click interface so MainActivity can react to taps on item
+    /**
+     * Interface definition for a callback to be invoked when a board item is clicked or long-clicked.
+     */
     public interface OnItemClickListener {
+        /**
+         * Called when a board item has been clicked.
+         * @param item The {@link Board} object associated with the clicked item.
+         */
         void onItemClick(Board item);
+
+        /**
+         * Called when a board item has been long-clicked.
+         * @param item The {@link Board} object associated with the long-clicked item.
+         */
         void onItemLongClick(Board item);
     }
 
@@ -36,7 +48,9 @@ public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.Boar
     }
 
 
-    // ViewHolder: holds row views
+    /**
+     * ViewHolder class that describes an item view and metadata about its place within the RecyclerView.
+     */
     public static class BoardListHolder extends RecyclerView.ViewHolder {
         TextView tvBoardDate, tvUserId;
         ImageView ivBoardImage;
@@ -87,7 +101,10 @@ public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.Boar
         return boardList.size();
     }
 
-    // Update list after DB changes
+    /**
+     * Updates the data set and refreshes the UI.
+     * @param newBoards The new list of {@link Board} items.
+     */
     public void updateItems(ArrayList<Board> newBoards) {
         this.boardList = newBoards;
         notifyDataSetChanged(); //FIXME:: add more specific notifyDataSet for each CRUD

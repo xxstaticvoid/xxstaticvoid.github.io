@@ -50,35 +50,30 @@ public class LoginActivity extends AppCompatActivity {
         }
 
 
-        //check for permissions
+        //check for permissions (only checks 1 time)
         if (!allPermissionsGranted()) {
             Log.d("BoardSavr","Permissions not granted");
             requestPermissionsFromUser();
         }
 
-
-
-        //get views
+        //get login views
         EditText usernameEditText = findViewById(R.id.edit_text_username);
         EditText passwordEditText = findViewById(R.id.edit_text_password);
 
 
-
-        //FIXME:: CLEAN UP ONCLICK LISTENER BY MOVING TO SEPARATE FUNCTION
         //ON 'SIGN IN' CLICK
         Button buttonSignIn = findViewById(R.id.button_sign_in);
         buttonSignIn.setOnClickListener(view -> {
             UserRepository userRepo = new UserRepository(this);
 
+            //get info from views
             String username = usernameEditText.getText().toString();
             String password = passwordEditText.getText().toString();
 
-            String passwordHash = PasswordHasher.hashPassword(password);
-
-            boolean success = userRepo.authenticate(username, passwordHash);
+            boolean signInSuccess = userRepo.authenticate(username, password);
 
             Intent intent = new Intent(this, MainActivity.class);
-            if(success) {
+            if(signInSuccess) {
                 intent.putExtra("isLoggedIn", true);
                 startActivity(intent);
             } else {
@@ -87,45 +82,39 @@ public class LoginActivity extends AppCompatActivity {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
                 alertDialog.setTitle("Yikes.. No account found");
 
-                alertDialog.setPositiveButton(R.string.alert_dialog_positive_text, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            long userRow = userRepo.registerUser(username, passwordHash);
-                            if(userRow > 0) {
-                                intent.putExtra("isLoggedIn", true);
-                                startActivity(intent);
-                            } else {
-                                Toast newToast = new Toast(mainContext);
-                                newToast.setText("Failed to create account");
-                                newToast.setDuration(LENGTH_SHORT);
-                                newToast.show();
-                            }
-
-                        } catch (Exception e) {
-                            Log.d("LoginActivity","Error registering user");
+                //Create Account option
+                alertDialog.setPositiveButton(R.string.alert_dialog_positive_text, (dialog, which) -> {
+                    try {
+                        long userRow = userRepo.registerUser(username, password);
+                        if(userRow > 0) {
+                            intent.putExtra("isLoggedIn", true);
+                            startActivity(intent);
+                        } else {
+                            Toast newToast = new Toast(mainContext);
+                            newToast.setText("Failed to create account");
+                            newToast.setDuration(LENGTH_SHORT);
+                            newToast.show();
                         }
+
+                    } catch (Exception e) {
+                        Log.d("LoginActivity","Error registering user");
                     }
                 });
-                alertDialog.setNeutralButton(R.string.alert_dialog_neutral_text, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //continue with less privilege
-                        //FIXME:: add privilege tracking
-                        intent.putExtra("isLoggedIn", false);
-                        startActivity(intent);
-                    }
+
+                //Continue without account option
+                alertDialog.setNeutralButton(R.string.alert_dialog_neutral_text, (dialog, which) -> {
+                    //continue with less privilege
+                    //FIXME:: add privilege tracking
+                    intent.putExtra("isLoggedIn", false);
+                    startActivity(intent);
                 });
 
                 //publish dialog to screen
                 alertDialog.show();
-
             }
         });
 
 
-
-        //FIXME:: CLEAN UP ONCLICK LISTENER BY MOVING TO SEPARATE FUNCTION
         //ON 'CREATE ACCOUNT' CLICK
         Button buttonCreateAccount = findViewById(R.id.button_create_account);
         buttonCreateAccount.setOnClickListener(view -> {
@@ -135,37 +124,50 @@ public class LoginActivity extends AppCompatActivity {
             String password = passwordEditText.getText().toString();
 
             long userRow = userRepo.registerUser(username, PasswordHasher.hashPassword(password));
-            if(userRow > 0) {
-                Toast newToast = new Toast(this);
+
+            //if register is successful
+            Toast newToast = new Toast(this);
+            if (userRow > 0) {
                 newToast.setText("Account created successfully");
-                newToast.setDuration(LENGTH_SHORT);
-                newToast.show();
             } else {
-                Toast newToast = new Toast(this);
                 newToast.setText("Failed to create account");
-                newToast.setDuration(LENGTH_SHORT);
-                newToast.show();
             }
+            newToast.setDuration(LENGTH_SHORT);
+            newToast.show();
         });
 
     }
 
 
+
+
+    // Application specific request code to match with a result reported to
     private static final int REQUEST_CODE_PERMISSIONS = 10;
+
     private static final String[] REQUIRED_PERMISSIONS = new String[]{
             Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
+    /**
+     * Requests permissions to be granted to this application.
+     *
+     */
     private void requestPermissionsFromUser() {
         requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
     }
 
-
+    /**
+     * Determine whether all the required permission have been granted.
+     *
+     * @return true if the permissions have been granted, false otherwise.
+     */
     private boolean allPermissionsGranted() {
-        return ContextCompat.checkSelfPermission(
+        boolean cameraGranted = ContextCompat.checkSelfPermission(
                 this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
-
+        boolean storageGranted = ContextCompat.checkSelfPermission(
+                this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        return cameraGranted && storageGranted;
     }
 
 }

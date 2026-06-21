@@ -35,8 +35,6 @@
     </style>
 
 
-
-
     <!-- Database styles -->
 
     <style name="DatabaseTitleTextStyle">
@@ -46,5 +44,21 @@
         <item name="android:textStyle">bold</item>
         <item name="android:gravity">center</item>
     </style>
-    
+
+
+    <!-- Board View styles -->
+    <style name="BoardDateTextStyle">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="BoardDescriptionTextStyle">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">sans-serif</item>>
+    </style>
+
+
 </resources>

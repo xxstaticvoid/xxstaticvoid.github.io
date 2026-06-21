@@ -41,6 +41,10 @@ import java.util.Locale;
 import java.util.concurrent.Executors;
 
 
+/**
+ * Activity responsible for capturing images of the chessboard using CameraX.
+ * It performs real-time board detection and cropping using OpenCV.
+ */
 public class CameraActivity extends AppCompatActivity {
 
     private ImageCapture imageCapture;
@@ -84,6 +88,7 @@ public class CameraActivity extends AppCompatActivity {
 
     /**
      *
+     * Initializes and starts the camera preview and image capture use cases.
      */
     private void startCamera() {
         ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
@@ -123,9 +128,10 @@ public class CameraActivity extends AppCompatActivity {
 
     /**
      *
+     * Captures a still image and processes it.
      *
      * @param imageCapture camera.core.ImageCapture / access to takePicture()
-     * @param parseTemplates boolean / whether to parse templates or not (current mode)
+     * @param parseTemplates whether to parse templates or not
      */
     private void takePhoto(ImageCapture imageCapture, boolean parseTemplates) {
         assert imageCapture != null;
@@ -221,6 +227,14 @@ public class CameraActivity extends AppCompatActivity {
         );
     }
 
+
+    /**
+     * Rotates a bitmap by the specified degrees.
+     *
+     * @param bitmap  The bitmap to rotate.
+     * @param degrees The degrees to rotate.
+     * @return The rotated bitmap.
+     */
     private Bitmap rotateBitmap(Bitmap bitmap, int degrees) {
 
         Matrix matrix = new Matrix();
@@ -239,6 +253,11 @@ public class CameraActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Performs piece calibration using the cropped board image.
+     *
+     * @param croppedBoardMat the mat containing the cropped and warped board
+     */
     private void calibrateTemplates(Mat croppedBoardMat) {
         CalibrationService calibrationService = new CalibrationService(
             templateStorage
@@ -247,7 +266,12 @@ public class CameraActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Detects the chessboard in the given image and crops/warps it into a square.
+     *
+     * @param rgbaMat The original image Mat.
+     * @return A Mat containing the detected and warped board, or null if detection fails.
+     */
     private Mat detectAndCropBoard(Mat rgbaMat) {
         Mat grayMat = new Mat();
         Imgproc.cvtColor(rgbaMat, grayMat, Imgproc.COLOR_RGBA2GRAY);
@@ -335,6 +359,13 @@ public class CameraActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Warps the detected board area into a top-down square view.
+     *
+     * @param rgbaMat original image Mat.
+     * @param boardCorners the four corners of the detected board.
+     * @return mat containing the warped board image.
+     */
     private Mat warpBoardToSquare(Mat rgbaMat, MatOfPoint2f boardCorners) {
         org.opencv.core.Point[] unorderedPoints = boardCorners.toArray();
         org.opencv.core.Point[] orderedPoints = orderBoardCorners(unorderedPoints);
@@ -383,6 +414,12 @@ public class CameraActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Reorders the board corners in a (consistent) clockwise order
+     *
+     * @param points the array of 4 points to order
+     * @return the reordered array of points
+     */
     private Point[] orderBoardCorners(Point[] points) {
         ArrayList<Point> pointList = new ArrayList<>(Arrays.asList(points));
 
@@ -427,6 +464,14 @@ public class CameraActivity extends AppCompatActivity {
 
     }
 
+
+    /**
+     * Calculates the distance between two points.
+     *
+     * @param a The first point.
+     * @param b The second point.
+     * @return real number distance between the points.
+     */
     private double distance(Point a, Point b) {
         double dx = a.x - b.x;
         double dy = a.y - b.y;
@@ -435,7 +480,11 @@ public class CameraActivity extends AppCompatActivity {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-
+    /**
+     * Saves a bitmap to the app's external files directory.
+     * @param bitmap the bitmap to save
+     * @param filename the name of the file
+     */
     private void saveBitmap(Bitmap bitmap, String filename) {
         assert bitmap != null;
         File photoFile = new File(this.getExternalFilesDir(null), filename);

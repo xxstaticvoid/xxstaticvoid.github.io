@@ -1,6 +1,5 @@
 package com.boardsaver;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -69,8 +68,28 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (adapter != null && boardRepo != null) {
+            adapter.updateItems(boardRepo.getAllItems());
+        }
+    }
+
+
+    /**
+     * starts new activity with selected board data; allowing the user to focus on board
+     *
+     * @param board board data type from BoardListAdapter.boardList
+     *
+     */
     private void switchToBoardView(Board board) {
+        if(!isLoggedIn) {
+            return;
+        }
+
         String[] boardData = {
+                String.valueOf(board.getId()),
                 board.getUserId(),
                 board.getState(),
                 board.getImagePath(),
@@ -84,8 +103,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    //open camera
+    /**
+     * opens camera activity if user is logged in
+     *
+     */
     private void openCameraActivity() {
         //only allow parts to be added if user logged in
         if(!isLoggedIn) {
@@ -96,7 +117,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * deletes selected board from board list
+     *
+     * @param board board data type from BoardListAdapter.boardList
+     *
+     */
     private void deleteBoardFromBoardList(Board board) {
         //only allow delete if logged in
         if(!isLoggedIn) {
@@ -112,6 +138,4 @@ public class MainActivity extends AppCompatActivity {
             Log.d("MainActivity","failed to delete entry on " + board.getId());
         }
     }
-
-
 }

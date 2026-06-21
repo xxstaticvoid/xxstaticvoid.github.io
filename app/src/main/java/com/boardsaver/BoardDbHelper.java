@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 
-//FIXME:: CONVERT CLASS TO SINGLETON PATTERN
 public class BoardDbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "saved_boards.db";

@@ -30,6 +30,9 @@
 
 
     <!-- Board View Activity -->
-    <string name="place_holder_text">Placeholder text</string>
+    <string name="game_overview_title_text">Game Overview</string>
+    <string name="game_notes_section_text">Game Notes:</string>
+    <string name="game_notes_placeholder_text">description</string>
+    <string name="button_save_text">Save</string>
 
 </resources>
