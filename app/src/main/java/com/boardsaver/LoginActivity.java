@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
             String username = usernameEditText.getText().toString();
             String password = passwordEditText.getText().toString();
 
-            long userRow = userRepo.registerUser(username, PasswordHasher.hashPassword(password));
+            long userRow = userRepo.registerUser(username, password);
 
             //if register is successful
             Toast newToast = new Toast(this);

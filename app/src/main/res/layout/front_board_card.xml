@@ -42,9 +42,12 @@
         <!-- Image -->
         <ImageView
             android:id="@+id/iv_board_capture"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/board_image_description" />
+            android:contentDescription="@string/board_image_description"
+            android:adjustViewBounds="true"
+            android:paddingTop="30dp"
+            android:paddingBottom="30dp" />
 
     </LinearLayout>
 

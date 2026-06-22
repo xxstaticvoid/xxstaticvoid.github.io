@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+
 import java.time.LocalDateTime;
 
 public class BoardViewActivity extends AppCompatActivity {
@@ -54,6 +56,10 @@ public class BoardViewActivity extends AppCompatActivity {
                 getPackageName()
         );
         ivBoardImage.setImageResource(imageResourceId);
+        Glide.with(this)
+                .load(boardData[3])
+                .placeholder(imageResourceId)
+                .into(ivBoardImage);
         
         Button btnSaveDetails = findViewById(R.id.btn_save_details);
         btnSaveDetails.setOnClickListener(v -> {

@@ -17,9 +17,8 @@ public enum ChessPiece {
     BLACK_BISHOP('b'),
     BLACK_ROOK('r'),
     BLACK_QUEEN('q'),
-    BLACK_KING('k'),
+    BLACK_KING('k');
 
-    UNKNOWN('?');
 
     private final char fenChar;
 
@@ -61,11 +60,10 @@ public enum ChessPiece {
 
             case "empty_light":
             case "empty_dark":
+            case "unknown":
             case "empty":
-                return EMPTY;
-
             default:
-                return UNKNOWN;
+                return EMPTY;
         }
     }
 }

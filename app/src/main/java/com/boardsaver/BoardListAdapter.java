@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 
@@ -85,6 +87,10 @@ public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.Boar
                 context.getPackageName()
         );
         holder.ivBoardImage.setImageResource(imageResourceId);
+        Glide.with(context)
+                .load(board.getImagePath())
+                .placeholder(imageResourceId)
+                .into(holder.ivBoardImage);
 
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) listener.onItemClick(board);

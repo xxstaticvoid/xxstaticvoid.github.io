@@ -43,4 +43,5 @@ dependencies {
     implementation libs.camera.lifecycle
     implementation libs.camera.view
     implementation libs.jbcrypt
+    implementation "com.github.bumptech.glide:compose:1.0.0-alpha.6" //fast image loading
 }

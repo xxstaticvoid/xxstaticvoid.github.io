@@ -7,7 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 
 //FIXME:: ADD SEPARATE THREAD FROM UI FOR RESPONSIVENESS
@@ -16,9 +17,11 @@ import java.util.ArrayList;
 public class BoardRepository {
 
     private final BoardDbHelper dbHelper;
+    private AtomicInteger nextId;
 
     public BoardRepository(Context context) {
         this.dbHelper = BoardDbHelper.getInstance(context);
+        this.nextId = new AtomicInteger(getNumOfRows() + 1);
     }
 
 
@@ -32,6 +35,7 @@ public class BoardRepository {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues boardValues = packIntoValues(board);
         long row = db.insert(BoardContract.BoardEntry.TABLE_NAME, null, boardValues);
+        if (row >= 0) nextId.incrementAndGet();
         return row >= 0;
     }
 
@@ -46,6 +50,7 @@ public class BoardRepository {
         String where = BoardContract.BoardEntry.COLUMN_ID + " = ?";
         String[] whereArgs = {String.valueOf(id)};
         int rowsAffected = db.delete(BoardContract.BoardEntry.TABLE_NAME, where, whereArgs );
+        if (rowsAffected > 0) nextId.decrementAndGet();
         return rowsAffected > 0;
     }
 
@@ -156,5 +161,8 @@ public class BoardRepository {
         return values;
     }
 
+    public synchronized int getNextId() {
+        return nextId.get();
+    }
 
 }

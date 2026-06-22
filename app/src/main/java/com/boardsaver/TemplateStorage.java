@@ -24,19 +24,24 @@ public class TemplateStorage {
         this.context = context.getApplicationContext();
     }
 
-    public void clearCurrentTemplates() {
+    public void clearCurrentTemplates() throws RuntimeException {
         File templateDirectory = getTemplateDirectory();
-
-        if (templateDirectory.exists()) {
-            File[] files = templateDirectory.listFiles();
-
-            if (files != null) {
-                for (File file : files) {
-                    file.delete();
-                }
-            }
-        } else {
+        if (!templateDirectory.exists()) {
             templateDirectory.mkdirs();
+            return;
+        }
+
+        File[] files = templateDirectory.listFiles();
+
+        if (files == null) {
+            return;
+        }
+
+        for (File file : files) {
+            boolean deleted = file.delete();
+            if (!deleted) {
+                throw new RuntimeException("Error deleting file: " + file.getName());
+            }
         }
     }
 
@@ -105,6 +110,17 @@ public class TemplateStorage {
         }
 
         return templates;
+    }
+
+
+    public boolean hasTemplates() {
+        File templateDirectory = getTemplateDirectory();
+        if (!templateDirectory.exists()) {
+            return false;
+        }
+
+        File[] files = templateDirectory.listFiles();
+        return files != null && files.length > 0;
     }
 
     private String extractLabelFromFilename(String filename) {

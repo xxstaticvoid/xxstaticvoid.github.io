@@ -13,14 +13,10 @@ public class Board {
     private String description;
 
 
-    public static String createImagePath(String imageName) {
-        return "R.drawable." + imageName;
-    }
-
     public Board(int id, String userId, String FEN, String imageName, LocalDateTime date, String description) {
         this.id = id;
         this.userId = userId;
-        this.FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
+        this.FEN = FEN;
 
         this.imagePath = imageName;
         this.date = date;

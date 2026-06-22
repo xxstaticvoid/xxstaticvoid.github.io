@@ -34,6 +34,7 @@ import org.opencv.imgproc.Imgproc;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -51,7 +52,7 @@ public class CameraActivity extends AppCompatActivity {
     private RectF previewBounds;
     private RectF guideRect;
 
-    private BoardConverter boardConverter;
+    private BoardRepository boardRepo;
     private TemplateStorage templateStorage;
 
     @Override
@@ -61,6 +62,7 @@ public class CameraActivity extends AppCompatActivity {
 
         WindowMetrics metrics = getWindowManager().getCurrentWindowMetrics();
         previewBounds = new RectF(metrics.getBounds());
+        boardRepo = new BoardRepository(this);
         templateStorage = new TemplateStorage(this);
 
         BoardOverlayView overlayView = findViewById(R.id.overlay_view);
@@ -187,35 +189,64 @@ public class CameraActivity extends AppCompatActivity {
                                     Bitmap.Config.ARGB_8888
                             );
 
-                            boardConverter = new BoardConverter(croppedBoardMat);
-
                             //if user selected 'calibrate' mode
                             if(parseTemplates) {
                                 //save theme as piece templates
                                 calibrateTemplates(croppedBoardMat);
+
+                                runOnUiThread(() -> {
+                                    android.widget.Toast.makeText(
+                                            CameraActivity.this,
+                                            "Calibration complete. Templates saved.",
+                                            android.widget.Toast.LENGTH_SHORT
+                                    ).show();
+                                });
+
                                 cameraExecutor.shutdown();
                                 return;
                             }
 
+                            if (!templateStorage.hasTemplates()) {
+                                runOnUiThread(() -> {
+                                    android.widget.Toast.makeText(
+                                            CameraActivity.this,
+                                            "No templates found",
+                                            android.widget.Toast.LENGTH_SHORT
+                                    ).show();
+                                });
+                                cameraExecutor.shutdown();
+                                return;
+                            }
+
+                            TemplateMatcher templateMatcher = new TemplateMatcher(templateStorage);
+                            String piecePlacement = templateMatcher.classifyBoardToFen(croppedBoardMat);
+
+                            System.out.println(piecePlacement);
+
                             //saved cropped image
                             Utils.matToBitmap(croppedBoardMat, boardBitmap);
-                            saveBitmap(boardBitmap, imageFilename);
+                            String photoPath = saveBitmap(boardBitmap, imageFilename);
 
                             //FIXME:: CREATE BOARD & ADD ENTRY IN DB
+                            boolean res = boardRepo.addBoard(new Board(
+                                    boardRepo.getNextId(),
+                                    "WHITE",
+                                    piecePlacement,
+                                    photoPath,
+                                    LocalDateTime.now(),
+                                    "Temporary Description"
+                            ));
 
+                            Log.d("CameraX", "Image Processing Finished");
 
-                            //FIXME:: UPDATE BOARD ADAPTER
-
-
-
+                            if(res) Log.d("CameraX", "Photo saved as: " + imageFilename);
                         } else {
                             Log.d("CameraX", "Could not detect board");
                         }
 
 
-                        cameraExecutor.shutdown();
-                        Log.d("CameraX", "Image Processing Finished");
-                        Log.d("CameraX", "Photo saved to: " + imageFilename);
+                        if (!cameraExecutor.isShutdown()) cameraExecutor.shutdown();
+
                     }
 
                     @Override
@@ -485,7 +516,7 @@ public class CameraActivity extends AppCompatActivity {
      * @param bitmap the bitmap to save
      * @param filename the name of the file
      */
-    private void saveBitmap(Bitmap bitmap, String filename) {
+    private String saveBitmap(Bitmap bitmap, String filename) {
         assert bitmap != null;
         File photoFile = new File(this.getExternalFilesDir(null), filename);
         try(FileOutputStream outputStream = new FileOutputStream(photoFile)) {
@@ -493,6 +524,7 @@ public class CameraActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e("CameraX", "Error saving bitmap: " + e.getMessage());
         }
+        return photoFile.getAbsolutePath();
     }
 
 }

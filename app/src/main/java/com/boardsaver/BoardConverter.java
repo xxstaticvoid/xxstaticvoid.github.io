@@ -15,48 +15,23 @@ public class BoardConverter {
 
     private final Mat normalizedBoardMat;
 
-
-
-    //used for testing fen conversions (DEBUG ONLY)
-    public static final char[][] startingBoardState = {
-            {'r','n','b','q','k','b','n','r'}, //black
-            {'p','p','p','p','p','p','p','p'},
-            {'1','1','1','1','1','1','1','1'},
-            {'1','1','1','1','1','1','1','1'},
-            {'1','1','1','1','1','1','1','1'},
-            {'1','1','1','1','1','1','1','1'},
-            {'P','P','P','P','P','P','P','P'},
-            {'R','N','B','Q','K','B','N','R'} //white
-    };
-
     public BoardConverter(Mat boardMat) {
+        this.normalizedBoardMat = normalizeBoard(boardMat);
+    }
+
+    public Mat getNormalizedBoardMat() {
+        return this.normalizedBoardMat;
+    }
+
+
+    public static Mat normalizeBoard(Mat boardMat) {
         Mat normalizedMat = new Mat();
         Imgproc.resize(boardMat, normalizedMat, new Size(BOARD_SIZE, BOARD_SIZE));
-        this.normalizedBoardMat = normalizedMat;
+        return normalizedMat;
     }
 
 
-    public String convert() {
-        char[][] boardState = new char[8][8];
-
-        for(int row = 0; row < 8; row++) {
-            for(int col = 0; col < 8; col++) {
-                //Log.d("CameraX", "Row: " + row + " Col: " + col);
-                Mat squareMat = getSquare(this.normalizedBoardMat, row, col);
-                if (isSquareOccupied(squareMat)) {
-                    boardState[row][col] = '?';
-                } else {
-                    boardState[row][col] = '1';
-                }
-
-            }
-        }
-
-        return classifySquares(boardState);
-    }
-
-
-    public String classifySquares(char[][] boardState) {
+    public static String boardStateToFen(char[][] boardState) {
         StringBuilder fenBuilder = new StringBuilder();
 
         for (int row = 0; row < 8; row++) {
@@ -89,25 +64,36 @@ public class BoardConverter {
         return fenBuilder.toString();
     }
 
-    private boolean isSquareOccupied(Mat squareMat) {
-        Mat centerMat = getSquareCenter(squareMat);
-
+    public static Mat preprocessForMatching(Mat inputMat) {
         Mat grayMat = new Mat();
-        Imgproc.cvtColor(centerMat, grayMat, Imgproc.COLOR_RGBA2GRAY);
 
-        Mat blurredMat = new Mat();
-        Imgproc.GaussianBlur(grayMat, blurredMat, new Size(3, 3), 0);
+        if (inputMat.channels() == 4) {
+            Imgproc.cvtColor(inputMat, grayMat, Imgproc.COLOR_RGBA2GRAY);
+        } else if (inputMat.channels() == 3) {
+            Imgproc.cvtColor(inputMat, grayMat, Imgproc.COLOR_BGR2GRAY);
+        } else {
+            grayMat = inputMat.clone();
+        }
+
+        Imgproc.GaussianBlur(grayMat, grayMat, new Size(3, 3), 0);
+
+        Mat resizedMat = new Mat();
+        Imgproc.resize(grayMat, resizedMat, new Size(64, 64));
 
         Mat edgesMat = new Mat();
-        Imgproc.Canny(blurredMat, edgesMat, 50, 150);
+        Imgproc.Canny(resizedMat, edgesMat, 50, 150);
+
+        return edgesMat;
+    }
+
+    public static double getEdgeRatio(Mat squareMat) {
+        Mat centerMat = getSquareCenter(squareMat);
+        Mat edgesMat = preprocessForMatching(centerMat);
 
         int edgePixels = Core.countNonZero(edgesMat);
         int totalPixels = edgesMat.rows() * edgesMat.cols();
 
-        double edgeRatio = (double) edgePixels / totalPixels;
-
-        //Log.d("CameraX",""+edgeRatio);
-        return edgeRatio > 0.015; //[0.009 - .04]
+        return (double) edgePixels / totalPixels;
     }
 
 
@@ -124,13 +110,13 @@ public class BoardConverter {
 
 
     public static Mat getSquareCenter(Mat squareMat) {
-        final int margin = squareMat.width() / 5;
+        int margin = squareMat.width() / 5;
 
         Rect centerRect = new Rect(
                 margin,
                 margin,
-                squareMat.width() - 2 * margin,
-                squareMat.height() - 2 * margin
+                squareMat.width() - (2 * margin),
+                squareMat.height() - (2 * margin)
         );
 
         return new Mat(squareMat, centerRect);
