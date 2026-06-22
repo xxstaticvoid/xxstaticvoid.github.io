@@ -43,7 +43,16 @@
       <section id="overview" class="feature-card">
         <h2>Project Overview</h2>
         <p>
-          Use this section to introduce the original programming project, what problem it was meant to solve, and why you selected it for enhancement. This is also a good place to briefly explain the purpose of your ePortfolio and what visitors can expect to learn from the sections below.
+          The Chess Board Saver application is an Android mobile app designed to capture, process, and save chess board positions, so that the user may review them later. 
+          The purpose of the project is to make it easier for a user to preserve the current state of a physical chess game by taking a picture of the board and converting that image into FEN notation. 
+          FEN, or Forsyth-Edwards Notation, is a standard format used to represent chess positions. By generating this notation automatically, the application allows users to save, review, and potentially reload board states without manually entering every piece.
+          The process begins in the camera interface, where the user captures an image of a physical chess board. 
+          The application then uses image processing techniques to locate, crop, and normalize the board so that it can be divided into 64 individual squares. 
+          Once the board image is properly aligned and scaled, the app analyzes each square to determine whether it is empty or occupied. 
+          For occupied squares, OpenCV template matching is used to compare the square image against piece templates created during a calibration step. 
+          In calibration mode, the user takes a picture of the board in the standard starting position from white’s perspective. 
+          The application saves templates for each piece type and later uses those templates to classify pieces in new board images. 
+          After all squares are analyzed, the board state is converted into FEN positional notation and can be stored along with the captured board image.
         </p>
         <iframe width="100%" height="315" title="YouTube video player"
           src="https://www.youtube.com/embed/qugVpsxFSOk?si=cFyDjgSqKM5TfXuH" allow="encrypted-media; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin">
