@@ -27,6 +27,7 @@
     </header>
 
     <main class="content-wrapper">
+      
        <section id="self-assessment" class="feature-card">
         <h2>Professional Self-Assessment</h2>
         <p>
@@ -40,12 +41,19 @@
 
         </p>
       </section>
+      
       <section id="overview" class="feature-card">
         <h2>Project Overview</h2>
         <p>
-          The Chess Board Saver application is an Android mobile app designed to capture, process, and save chess board positions, so that the user may review them later. 
-          The purpose of the project is to make it easier for a user to preserve the current state of a physical chess game by taking a picture of the board and converting that image into FEN notation. 
-          FEN, or Forsyth-Edwards Notation, is a standard format used to represent chess positions. By generating this notation automatically, the application allows users to save, review, and potentially reload board states without manually entering every piece.
+          The BoardSavr application is an Android mobile app designed to capture, process, and save chess board positions, so that the user may review them later.
+          This project was built as improvement / complete revamp of a previous project that I made for my Mobile App Development class which was originally an app to keep track of spare parts in an inventory.
+          The original app was intended for technicians to keep track of the number of spare parts that are currently available in inventory.
+          With the new and revised artifact, instead of storing spare parts we are now storing chess postions.
+          <br>
+          The purpose of the BoardSavr app is to make it easier for a user to preserve the current state of a physical chess game by taking a picture of the board and converting that image into FEN notation. 
+          FEN notation is a standard format used to represent chess positions. By generating this notation automatically, the application allows users to save and review board states without manually entering every piece.
+          The project uses technologies like CameraX, OpenCV, and Glide for capturing the board, processing the image, and displaying the image respectively. 
+          <br>
           The process begins in the camera interface, where the user captures an image of a physical chess board. 
           The application then uses image processing techniques to locate, crop, and normalize the board so that it can be divided into 64 individual squares. 
           Once the board image is properly aligned and scaled, the app analyzes each square to determine whether it is empty or occupied. 
@@ -53,6 +61,8 @@
           In calibration mode, the user takes a picture of the board in the standard starting position from white’s perspective. 
           The application saves templates for each piece type and later uses those templates to classify pieces in new board images. 
           After all squares are analyzed, the board state is converted into FEN positional notation and can be stored along with the captured board image.
+          <br>
+          <b>Here is my video code review of the Spareparts Inventory: </b> 
         </p>
         <iframe width="100%" height="315" title="YouTube video player"
           src="https://www.youtube.com/embed/qugVpsxFSOk?si=cFyDjgSqKM5TfXuH" allow="encrypted-media; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin">
@@ -62,21 +72,51 @@
       <section id="software-design" class="feature-card">
         <h2>Software Design Improvements</h2>
         <p>
-          Describe the structural improvements you made to the application, such as refactoring code, separating responsibilities, improving readability, or applying stronger object-oriented design principles. Focus on how these changes made the project easier to maintain, test, and expand.
+          This project demonstrates software design and engineering through several structural improvements made to the application.
+          One of the main improvements was refactoring the code so that each part of the application has a clearer responsibility.
+          Instead of placing all camera, image processing, database, and board conversion logic in one large activity class, the application was separated into focused classes and services.
+          For example, the camera activity handles user interaction and image capture, while separate classes manage board conversion, template calibration, template storage, piece matching, and FEN generation.
+          <br>
+          This separation of responsibilities improves readability and maintainability because each class has a specific purpose.
+          The image-processing logic is easier to understand because it is isolated from the Android user interface logic.
+          The template matching logic is also easier to test and improve because it is handled separately from the camera capture process.
+          This structure makes future changes more manageable, such as improving the matching algorithm, changing the database schema, or adding new board review features.
         </p>
       </section>
 
       <section id="algorithms" class="feature-card">
         <h2>Algorithms and Data Structures</h2>
         <p>
-          Explain any improvements related to logic, performance, searching, sorting, validation, or data handling. This section can show how your algorithmic choices made the application more efficient, reliable, or accurate.
+          This project demonstrates algorithms and data structures through the logic used to process the chess board image and convert it into structured board data.
+          The main algorithmic challenge was transforming a real world image into a usable digital representation of a chess position.
+          The application uses computer vision and image processing techniques to crop and normalize the board, convert to grayscale, divide it into an 8x8 grid, and analyze each square individually.
+          <br>
+          A major improvement was separating empty-square detection from piece classification.
+          Instead of attempting to classify every square as a piece, the application first determines whether a square is empty or occupied.
+          This improves accuracy and performance because template matching only needs to run on squares that likely contain pieces.
+          The app uses image data such as edge ratio and contrast to help determine whether a square contains a piece.
+          This validation step reduces false matches and prevents empty squares from being incorrectly classified as chess pieces.
+          <br>
+          The template matching process also demonstrates the use of searching and comparison logic.
+          Each occupied square is compared against saved piece templates, and the best match is selected based on similarity.
+          The board itself is represented as a 2d data structure, where each row and column corresponds to a chess square.
+          Once the pieces are classified, this board representation is converted into FEN notation by scanning each row, counting consecutive empty squares, and appending the correct piece symbols.
+          This demonstrates practical use of arrays, searching, comparison, validation, and data transformation.
         </p>
       </section>
 
       <section id="databases" class="feature-card">
         <h2>Database Enhancements</h2>
         <p>
-          Discuss changes made to how information is stored, retrieved, updated, or organized. You can include improvements to schemas, queries, database access classes, or any changes that made the data layer cleaner and more dependable.
+          The project demonstrates database skills through the way chess board information is stored, retrieved, and organized.
+          Instead of only capturing images temporarily, the application saves meaningful board records that can be accessed later.
+          Each saved board can include information such as the captured image filename, date, description, and generated FEN notation.
+          This allows the user to build a collection of saved chess positions rather than losing the board state after the image is processed.
+          <br>
+          The database portion of the project supports persistent storage, which is important for making the application useful beyond a single session.
+          The app organizes saved board data so that records can be retrieved and displayed later in the application.
+          This required planning how board information should be structured and how different pieces of data relate to one another.
+          For example, the image file and FEN notation both describe the same saved board state, so they need to be stored together in a consistent record.
         </p>
       </section>
 
