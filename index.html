@@ -123,7 +123,34 @@
       <section id="reflection" class="feature-card">
         <h2>Reflection and Future Work</h2>
         <p>
-          Use this final section to reflect on what you learned while improving the project. You can also mention possible future enhancements, lessons learned, and how this work demonstrates your growth as a computer science student.
+          Improving my Chess Board Saver application helped me better understand how much planning and refinement goes into turning a basic idea into a more complete software project.
+          At the beginning, the goal seemed simple: take a picture of a chess board, detect the pieces, and save the board state as FEN notation.
+          However, as I worked through the project, I learned that each part of that process introduced its own technical challenges.
+          The project required me to combine Android development, image processing, data storage, and software design into one working application.
+          <br>
+          One of the biggest lessons I learned is that computer vision can be very persnickety. And this is a big understatement.
+          Small changes in lighting, camera angle, board color, piece shape, or image rotation can create major differences in how the image is processed.
+          Even after I was able to crop and normalize the chess board, extracting accurate board data still required careful testing. And even still isn't all that dependable.
+          I had to think about how the board was divided into squares, how to detect whether a square was empty, and how to compare occupied squares against saved templates.
+          This taught me that computer vision is not just about applying an algorithm, but its more about breaking down the big problem into smaller steps. 
+          It also requires debugging, validating assumptions, adjusting thresholds.
+          <br>
+          I also improved my understanding of Android development.
+          Managing the camera involved more than simply taking a picture.
+          I had to consider user permissions, CameraX behavior, image orientation, background processing, and how the captured image differed from the preview shown on screen.
+          I also became more aware of thread safety because image capture and processing should not block the main user interface thread. 
+          Keeping longer image-processing work separate from UI updates made the application more stable and responsive.
+          <br>
+          There are still several future enhancements I could make. One improvement would be to make the template matching more robust under different lighting conditions or possibly add support for multiple chess sets. 
+          Another possible enhancement would be to allow users to manually correct detected pieces before saving the final FEN notation.
+          I could also add search, sorting, or filtering features for saved boards, such as sorting by date or searching by description.
+          In the future, I could even explore machine learning-based piece recognition instead of relying only on template matching.
+          All in all, I plan to continue working on this app and eventually publish it to the Play Store once I feel it is good enough.
+          <br>
+          Overall, the BoardSavr project demonstrates my growth as a computer science student because it required me to apply concepts from several areas at once.
+          I had to design cleaner software architecture, improve algorithmic logic, handle real application data, and debug difficult image processing problems.
+          The project also taught me the importance of testing each stage of a system independently.
+          By improving this application, I gained more confidence in building software that is not only functional, but also organized, maintainable, and expandable.
         </p>
       </section>
     </main>
