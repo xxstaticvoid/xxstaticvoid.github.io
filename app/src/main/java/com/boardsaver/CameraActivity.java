@@ -227,9 +227,8 @@ public class CameraActivity extends AppCompatActivity {
                             Utils.matToBitmap(croppedBoardMat, boardBitmap);
                             String photoPath = saveBitmap(boardBitmap, imageFilename);
 
-                            //FIXME:: CREATE BOARD & ADD ENTRY IN DB
+                            // create BOARD & ADD ENTRY IN DB
                             boolean res = boardRepo.addBoard(new Board(
-                                    boardRepo.getNextId(),
                                     "WHITE",
                                     piecePlacement,
                                     photoPath,

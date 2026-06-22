@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 
 
 public class Board {
-    private final int id;
+    private int id;
     private final String userId;
     private final String FEN;
     private final String imagePath;
@@ -15,6 +15,17 @@ public class Board {
 
     public Board(int id, String userId, String FEN, String imageName, LocalDateTime date, String description) {
         this.id = id;
+        this.userId = userId;
+        this.FEN = FEN;
+
+        this.imagePath = imageName;
+        this.date = date;
+        this.description = description;
+    }
+
+    //Constructor for NEW items that are not in the db
+    public Board(String userId, String FEN, String imageName, LocalDateTime date, String description) {
+        this.id = -1;
         this.userId = userId;
         this.FEN = FEN;
 
@@ -57,7 +68,7 @@ public class Board {
         this.description = description;
     }
 
-
+    public void setId(int id) { this.id = id; }
 
     @NonNull
     @Override

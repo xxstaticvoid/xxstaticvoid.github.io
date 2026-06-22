@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 
 //FIXME:: ADD SEPARATE THREAD FROM UI FOR RESPONSIVENESS
@@ -17,11 +16,9 @@ import java.util.concurrent.atomic.AtomicLong;
 public class BoardRepository {
 
     private final BoardDbHelper dbHelper;
-    private AtomicInteger nextId;
 
     public BoardRepository(Context context) {
         this.dbHelper = BoardDbHelper.getInstance(context);
-        this.nextId = new AtomicInteger(getNumOfRows() + 1);
     }
 
 
@@ -34,9 +31,14 @@ public class BoardRepository {
     public boolean addBoard(Board board) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues boardValues = packIntoValues(board);
+        boardValues.remove(BoardContract.BoardEntry.COLUMN_ID);
+
         long row = db.insert(BoardContract.BoardEntry.TABLE_NAME, null, boardValues);
-        if (row >= 0) nextId.incrementAndGet();
-        return row >= 0;
+        if (row != -1) {
+            board.setId((int) row); //sync numbers
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -50,7 +52,6 @@ public class BoardRepository {
         String where = BoardContract.BoardEntry.COLUMN_ID + " = ?";
         String[] whereArgs = {String.valueOf(id)};
         int rowsAffected = db.delete(BoardContract.BoardEntry.TABLE_NAME, where, whereArgs );
-        if (rowsAffected > 0) nextId.decrementAndGet();
         return rowsAffected > 0;
     }
 
@@ -152,17 +153,16 @@ public class BoardRepository {
      */
     private ContentValues packIntoValues(Board board) {
         ContentValues values = new ContentValues();
-        values.put(BoardContract.BoardEntry.COLUMN_ID, board.getId());
+        //only include id if its valid
+        if(board.getId() != -1) {
+            values.put(BoardContract.BoardEntry.COLUMN_ID, board.getId());
+        }
         values.put(BoardContract.BoardEntry.COLUMN_USER_ID, board.getUserId());
         values.put(BoardContract.BoardEntry.COLUMN_FEN, board.getState());
         values.put(BoardContract.BoardEntry.COLUMN_IMAGE_PATH, board.getImagePath());
         values.put(BoardContract.BoardEntry.COLUMN_DATE, board.getDate().toString());
         values.put(BoardContract.BoardEntry.COLUMN_DESCRIPTION, board.getDescription());
         return values;
-    }
-
-    public synchronized int getNextId() {
-        return nextId.get();
     }
 
 }
