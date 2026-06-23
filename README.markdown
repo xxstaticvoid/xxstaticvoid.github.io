@@ -18,4 +18,12 @@ This ePortfolio is part of my computer science capstone project for Southern Ham
     <td><img src="./assets/images/LoginActivity_screenshot.png" width="75%" style="vertical-align:middle"></td>
     <td><img src="./assets/images/MainActivity_screenshot.png" width="75%" style="vertical-align:middle"></td>
   </tr>
+  <tr>
+    <td><b>Camera Capture Page</b></td>
+    <td><b>Focused Board Page</b></td>
+  </tr>
+  <tr>
+    <td><img src="./assets/images/CameraActivity_screenshot.png" width="75%" style="vertical-align:middle"></td>
+    <td><img src="./assets/images/BoardViewActivity_screenshot.png" width="75%" style="vertical-align:middle"></td>
+  </tr>
 </table>
